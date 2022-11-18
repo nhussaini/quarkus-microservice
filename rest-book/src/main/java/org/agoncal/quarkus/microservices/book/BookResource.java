@@ -2,6 +2,7 @@ package org.agoncal.quarkus.microservices.book;
 
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
@@ -18,6 +19,8 @@ import java.time.Instant;
 @Tag(name = "Book REST endpoint")
 public class BookResource {
 
+    @RestClient
+    NumberProxy proxy;
     @Inject
     Logger logger;
 
@@ -30,7 +33,7 @@ public class BookResource {
     )
     public Response createABook(@FormParam("title") String title, @FormParam("author") String author, @FormParam("year") int yearOfPublication, @FormParam("genre") String genre) {
         Book book = new Book();
-        book.isbn13 = "will come later";
+        book.isbn13 = proxy.generateIsbnNumbers().isbn13;
         book.title = title;
         book.author = author;
         book.yearOfPublication = yearOfPublication;
